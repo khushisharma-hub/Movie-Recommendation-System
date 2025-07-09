@@ -1,104 +1,133 @@
 # 🎬 Movie Recommendation System
 
-A content-based recommender system that suggests similar Hollywood movies using **cosine similarity** on user ratings.
+A personalized content-based movie recommender system designed to suggest similar Hollywood movies based on user preferences using collaborative filtering.
 
 ---
 
-## 📁 Project Structure
+## 📌 Internship Details
 
-- 📄 [hollywood_movie_ratings_200.csv](https://github.com/khushisharma-hub/Movie-Recommendation-System/blob/main/hollywood_movie_ratings_200.csv) — Dataset of 200 Hollywood movies and user ratings  
-- 📔 [Movie_Recommendation_System.ipynb](https://github.com/khushisharma-hub/Movie-Recommendation-System/blob/main/Movie_Recommendation_System.ipynb) — Full Google Colab Notebook  
-- 🎥 [Demo Video](https://drive.google.com/file/d/1VkVigo2hA8JFYQgOewPnM97EtE0tM63f/view?usp=sharing)
+- **Internship Program**: Tamizhan Skills Rise Internship
+- **Domain**: Machine Learning & AI
+- **Intern ID**: TS-RISE-MLAI-2514
+- **Project Title**: Movie Recommendation System
+- **Author**: Khushi Sharma
+- **GitHub Repository**: [Movie Recommendation System](https://github.com/khushisharma-hub/Movie-Recommendation-System)
+- **Demo Video**: [Watch Demo](https://drive.google.com/file/d/1VkVigo2hA8JFYQgOewPnM97EtE0tM63f/view?usp=sharing)
+
+---
+
+## 📚 Table of Contents
+
+1. [Project Overview](#project-overview)
+2. [Objective](#objective)
+3. [Dataset Description](#dataset-description)
+4. [Technologies Used](#technologies-used)
+5. [Project Workflow](#project-workflow)
+6. [Features](#features)
+7. [How It Works](#how-it-works)
+8. [Demo Output](#demo-output)
+9. [Conclusion](#conclusion)
+10. [Important Links](#important-links)
+
+---
+
+## 🧩 Project Overview
+
+Movie streaming platforms like Netflix, Prime Video, and Hulu use recommendation systems to improve user experience and engagement. This project demonstrates a simplified version of such a system using a dataset of 200 Hollywood movies and their user ratings. The system provides movie recommendations based on user preferences through collaborative filtering.
 
 ---
 
 ## 🎯 Objective
 
-To build a recommender system using collaborative filtering (item-based) to personalize movie suggestions based on user preferences.
+The objective of this project is to:
+
+- Build a recommendation system that suggests similar movies to a given input.
+- Use collaborative filtering and cosine similarity to identify related titles.
+- Provide personalized recommendations based on historical ratings data.
 
 ---
 
-## ⚙️ Features
+## 🗃️ Dataset Description
 
-- ✅ Cosine similarity for finding similar movies
-- ✅ User-movie ratings matrix
-- ✅ Personalized top 5 movie recommendations
-- ✅ Google Colab compatible
-- ✅ Custom input for real-time movie suggestion
+- **File**: [hollywood_movie_ratings_200.csv](https://github.com/khushisharma-hub/Movie-Recommendation-System/blob/main/hollywood_movie_ratings_200.csv)
+- **Format**: CSV
+- **Total Movies**: 200
+- **Columns**:
+  - `UserID`: Unique user identifier
+  - `Movie`: Movie name
+  - `Rating`: User's rating of the movie (1-5 scale)
 
----
-
-## 🚀 How to Use
-
-1. Open the Colab Notebook from the link above.
-2. Upload the CSV file when prompted.
-3. Call the function like this:
-
-```python
-recommend_movies("A Quiet Place Part II")
-📽️ Demo Video
-🎬 Watch Demo on Google Drive
-
-👩‍💻 Author
-Khushi Sharma
-GitHub: @khushisharma-hub
-
-✅ Conclusion
-This project showcases how content-based filtering can be used to create a movie recommendation system using simple Python tools. It’s ideal for beginners in machine learning and data science.
-
-🔗 Important Links
-🔹 Dataset (CSV)
-
-🔹 Google Colab Notebook
-
-python
-Copy
-Edit
+This dataset simulates a real-world ratings matrix where multiple users have rated various movies.
 
 ---
 
-## 🧠 Full Google Colab Code
+## 🛠️ Technologies Used
 
-```python
-# ✅ STEP 1: Upload the CSV File
-from google.colab import files
-import pandas as pd
-import io
+- **Python**
+- **Pandas** for data processing
+- **Scikit-learn** for similarity calculation
+- **Google Colab** for development and testing
+- **Cosine Similarity** for finding related movies
+- **Collaborative Filtering** (item-based)
 
-uploaded = files.upload()  # Upload hollywood_movie_ratings_200.csv
-filename = next(iter(uploaded))
-df = pd.read_csv(io.BytesIO(uploaded[filename]))
+---
 
-print("📥 Dataset Loaded Successfully!")
-print(df.head())
+## 🔄 Project Workflow
 
-# ✅ STEP 2: Create User-Movie Ratings Matrix
-user_movie_matrix = df.pivot_table(index='UserID', columns='Movie', values='Rating')
-print("\n🎥 User-Movie Ratings Matrix Preview:")
-print(user_movie_matrix.head())
+1. **Data Upload**: Load the dataset into a Pandas DataFrame.
+2. **Pivot Table**: Convert the data into a User-Movie matrix.
+3. **Preprocessing**: Fill missing values with zeros to prepare for similarity calculation.
+4. **Cosine Similarity**: Calculate the similarity between movies.
+5. **Recommendation Function**: Retrieve top 5 similar movies for any given input.
+6. **User Interaction**: User can input a movie name to get recommendations.
 
-# ✅ STEP 3: Fill NaN with 0 for cosine similarity calculation
-movie_matrix_filled = user_movie_matrix.fillna(0)
+---
 
-# ✅ STEP 4: Compute Cosine Similarity Between Movies
-from sklearn.metrics.pairwise import cosine_similarity
+## ⭐ Features
 
-cosine_sim = cosine_similarity(movie_matrix_filled.T)  # transpose: items instead of users
-similarity_df = pd.DataFrame(cosine_sim, 
-                             index=movie_matrix_filled.columns, 
-                             columns=movie_matrix_filled.columns)
+- 🎞️ Suggests top 5 similar movies based on your input
+- 💡 Easy-to-use and Google Colab compatible
+- 📊 Uses real rating patterns to determine movie similarity
+- 🔍 Displays list of available movie titles
+- 📈 Efficient even with limited data (200 movies)
 
-# ✅ STEP 5: Movie Recommender Function
-def recommend_movies(movie_name, similarity_matrix=similarity_df, top_n=5):
-    if movie_name not in similarity_matrix.columns:
-        print(f"❌ Movie '{movie_name}' not found in the dataset.")
-        print("🔎 Tip: Use print(df['Movie'].unique()) to list available movie names.")
-        return
-    print(f"\n🎬 Because you watched **{movie_name}**, you might also like:")
-    recommended = similarity_matrix[movie_name].sort_values(ascending=False)[1:top_n+1]
-    for movie, score in recommended.items():
-        print(f"👉 {movie} (Similarity Score: {score:.2f})")
+---
 
-# ✅ STEP 6: Try with a Sample Movie
-print("\n🔍 Available Movies:\n", df['Movie'].unique()[:10])  # Show some available movies
-recommend_movies("A Quiet Place Part II")
+## 💡 How It Works
+
+The recommender system works by calculating cosine similarity scores between movies based on how users rated them. If two movies are frequently rated similarly by many users, they will have a high similarity score. When a user inputs a movie name, the system sorts the similarity scores and returns the most closely related movies as suggestions.
+
+---
+
+## 📽️ Demo Output
+
+After uploading the dataset and running the recommendation function with an input like:
+
+**"A Quiet Place Part II"**
+
+The system might return:
+
+🎬 Because you watched A Quiet Place Part II, you might also like:
+👉 A Quiet Place
+👉 It Chapter Two
+👉 Annabelle Comes Home
+👉 The Conjuring
+👉 The Nun
+
+---
+
+## ✅ Conclusion
+
+This project is a great example of how **machine learning and data science** can be applied to personalize user experiences. Using a basic dataset and content-based filtering, we built a working recommendation engine that mimics the core logic used in streaming platforms.
+
+It not only strengthens machine learning skills but also demonstrates real-world applicability of algorithms like cosine similarity and collaborative filtering.
+
+---
+
+## 🔗 Important Links
+
+- 📂 Dataset CSV: [hollywood_movie_ratings_200.csv](https://github.com/khushisharma-hub/Movie-Recommendation-System/blob/main/hollywood_movie_ratings_200.csv)
+- 📔 Colab Notebook: [Movie_Recommendation_System.ipynb](https://github.com/khushisharma-hub/Movie-Recommendation-System/blob/main/Movie_Recommendation_System.ipynb)
+- 🎥 Demo Video: [Watch Here](https://drive.google.com/file/d/1VkVigo2hA8JFYQgOewPnM97EtE0tM63f/view?usp=sharing)
+
+---
